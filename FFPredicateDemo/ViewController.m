@@ -33,6 +33,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+//    [self test];
+//    [self test1];
     [self test2];
 }
 
