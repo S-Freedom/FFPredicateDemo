@@ -27,25 +27,27 @@
 
 @interface ViewController ()
 @property (strong,nonatomic) NSMutableArray *personArray;
-@property (strong,nonatomic) NSArray *filterArray;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self test1];
-    
+    [self test2];
+}
+
+- (void)test{
+    NSArray *arr = @[@"hah",@"abcdh",@"abhaha",@"",@"xigua"];
+    NSString *fileStr1 = @"h";
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self CONTAINS %@",fileStr1];
+    NSLog(@"predicate :%@",[arr filteredArrayUsingPredicate:predicate]);
 }
 
 #pragma  mark -- 过滤数组
 - (void)test1{
-    self.filterArray = @[@" alice",@"i'm zhang",@"i'm jack"];
-    
     NSArray *firstNames = @[ @"Alice", @"Bob", @"Charlie", @"Quentin" ];
     NSArray *lastNames = @[ @"Smith", @"Jones", @"Smith", @"Alberts" ];
-    NSArray *ages = @[ @24, @27, @33, @31 ];
-    
+    NSArray *ages = @[@24, @27, @33, @31];
     self.personArray = [NSMutableArray array];
     [firstNames enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         Person *person = [[Person alloc] init];
@@ -54,7 +56,7 @@
         person.age = ages[idx];
         [self.personArray addObject:person];
     }];
-    
+
     NSPredicate *bobPredicate = [NSPredicate predicateWithFormat:@"firstName = 'Bob'"];
     NSPredicate *smithPredicate = [NSPredicate predicateWithFormat:@"lastName = %@", @"Smith"];
     NSPredicate *thirtiesPredicate = [NSPredicate predicateWithFormat:@"age >= 30"];
@@ -65,6 +67,28 @@
     
     NSLog(@"30's: %@", [self.personArray filteredArrayUsingPredicate:thirtiesPredicate]);
     
+    NSLog(@"============================================================");
+}
+
+- (void)test2{
+    NSArray *firstNames = @[ @"Alice", @"Bob", @"Charlie", @"Quentin" ];
+    NSArray *lastNames = @[ @"Smith", @"Jones", @"Smith", @"Alberts" ];
+    NSArray *ages = @[@24, @27, @33, @31];
+    self.personArray = [NSMutableArray array];
+    [firstNames enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        Person *person = [[Person alloc] init];
+        person.firstName = firstNames[idx];
+        person.lastName = lastNames[idx];
+        person.age = ages[idx];
+        [self.personArray addObject:person];
+    }];
+    
+   NSPredicate *blockPredicate = [NSPredicate predicateWithBlock:^BOOL(id  _Nonnull evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+        
+        return [evaluatedObject firstName].length < 5;
+    }];
+    
+     NSLog(@"blockPredicate :%@", [self.personArray filteredArrayUsingPredicate:blockPredicate]);
     NSLog(@"============================================================");
 }
 
